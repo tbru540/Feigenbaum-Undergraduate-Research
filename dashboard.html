@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Agriculture Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 10px;
+      background: #f7f7f7;
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    .card {
+      background: white;
+      padding: 15px;
+      margin: 15px auto;
+      max-width: 95%;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+    @media screen and (max-width: 768px) {
+      h2 {
+        font-size: 1.1rem;
+      }
+      .card {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Smart Agriculture Dashboard</h1>
+
+  <div class="card">
+    <h2>Current Readings</h2>
+    <p><strong>Temperature:</strong> <span id="temperature">--</span> °F</p>
+    <p><strong>Humidity:</strong> <span id="humidity">--</span> %</p>
+    <p><strong>Soil Moisture:</strong> <span id="moisture">--</span> %</p>
+    <p><strong>Electrical Conductivity:</strong> <span id="ec">--</span> mS/cm</p>
+    <p><strong>pH:</strong> <span id="ph">--</span></p>
+    <p><strong>Light:</strong> <span id="light">--</span> lux</p>
+    <p><strong>Barometric Pressure:</strong> <span id="pressure">--</span> hPa</p>
+    <p><strong>Proximity:</strong> <span id="proximity">--</span> cm (Approximate)</p>
+  </div>
+
+  <div class="card"><h2>Temperature Over Time</h2><div class="chart-container"><canvas id="temperatureChart"></canvas></div></div>
+  <div class="card"><h2>Humidity Over Time</h2><div class="chart-container"><canvas id="humidityChart"></canvas></div></div>
+  <div class="card"><h2>Soil Moisture Over Time</h2><div class="chart-container"><canvas id="moistureChart"></canvas></div></div>
+  <div class="card"><h2>Electrical Conductivity Over Time</h2><div class="chart-container"><canvas id="ecChart"></canvas></div></div>
+  <div class="card"><h2>Soil pH Over Time</h2><div class="chart-container"><canvas id="phChart"></canvas></div></div>
+  <div class="card"><h2>Barometric Pressure Over Time</h2><div class="chart-container"><canvas id="pressureChart"></canvas></div></div>
+  <div class="card"><h2>Grow Light Proximity</h2><div class="chart-container"><canvas id="proximityChart"></canvas></div></div>
+
+  <script>
+    let tempChart, humidityChart, moistureChart, ecChart, phChart, lightChart, pressureChart, proximityChart;
+
+    async function updateDashboard() {
+      console.log("Fetching data...");
+      try {
+        const res = await fetch('/data');
+        const data = await res.json();
+        console.log("Data received:", data);
+
+        if (!data.length) return;
+        const latest = data[data.length - 1];
+
+        // Update card readings (Section at the top that displays all current readings)
+        document.getElementById("temperature").textContent = latest.temperature.toFixed(1);
+        document.getElementById("humidity").textContent = latest.humidity.toFixed(1);
+        document.getElementById("moisture").textContent = latest.moisture.toFixed(1);
+        document.getElementById("ec").textContent = latest.ec.toFixed(2);
+        document.getElementById("ph").textContent = latest.ph.toFixed(1);
+        document.getElementById("light").textContent = latest.lux;
+        document.getElementById("pressure").textContent = latest.pressure.toFixed(2);
+        document.getElementById("proximity").textContent = latest.proximity.toFixed(1);
+
+        // Labels and datasets. Also displays the local timezone of the user
+        const labels = data.map(d => new Date(d.timestamp).toLocaleTimeString());
+        const tempData = data.map(d => d.temperature);
+        const humidityData = data.map(d => d.humidity);
+        const moistureData = data.map(d => d.moisture);
+        const ecData = data.map(d => d.ec);
+        const phData = data.map(d => d.ph);
+        const lightData = data.map(d => d.lux);
+        const pressureData = data.map(d => d.pressure);
+        const proximityData = data.map(d => d.proximity);
+
+        // Chart update function
+        function buildOrUpdateChart(chart, id, label, color, dataset) {
+          const ctx = document.getElementById(id).getContext('2d');
+          if (!chart) {
+            return new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels,
+                datasets: [{
+                  label,
+                  data: dataset,
+                  borderColor: color,
+                  fill: false,
+                  tension: 0.2
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  x: { title: { display: true, text: 'Time' }},
+                  y: { title: { display: true, text: label }}
+                }
+              }
+            });
+          } else {
+            chart.data.labels = labels;
+            chart.data.datasets[0].data = dataset;
+            chart.update();
+            return chart;
+          }
+        }
+
+        // Render or update each chart
+        tempChart = buildOrUpdateChart(tempChart, 'temperatureChart', 'Temperature (°F)', 'red', tempData);
+        humidityChart = buildOrUpdateChart(humidityChart, 'humidityChart', 'Humidity (%)', 'blue', humidityData);
+        moistureChart = buildOrUpdateChart(moistureChart, 'moistureChart', 'Soil Moisture (%)', 'green', moistureData);
+        ecChart = buildOrUpdateChart(ecChart, 'ecChart', 'EC (mS/cm)', 'purple', ecData);
+        phChart = buildOrUpdateChart(phChart, 'phChart', 'Soil pH', 'orange', phData);
+        lightChart = buildOrUpdateChart(lightChart, 'lightChart', 'Light (lux)', 'gold', lightData);
+        pressureChart = buildOrUpdateChart(pressureChart, 'pressureChart', 'Pressure (hPa)', 'brown', pressureData);
+        proximityChart = buildOrUpdateChart(proximityChart, 'proximityChart', 'Proximity (cm)', 'teal', proximityData);
+
+      } catch (err) {
+        console.error("Error updating dashboard:", err);
+      }
+    }
+
+    updateDashboard();
+    setInterval(updateDashboard, 3000); // every 3 seconds
+  </script>
+</body>
+</html>
