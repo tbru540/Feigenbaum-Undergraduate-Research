@@ -25,6 +25,7 @@
     - AP3216C Ambient Light and Proximity Sensor
     - Relay Module (Water Pump & Fertilizer Pump)
 */
+
 #include <Wire.h>
 #include <Adafruit_BMP085.h>
 #include <WiFi.h>
@@ -60,8 +61,8 @@ DHT dht(DHTPIN, DHTTYPE);
 #define WATER_RELAY_PIN 6
 
 // Thresholds
-const float EC_THRESHOLD = 0.8;                       // 1-2 mS/cm is optimal. < 00.8 mS/cm → fertilize 
-const int MOISTURE_THRESHOLD = 40;                    // 40-60% is optimal. < 40% → water
+const float EC_THRESHOLD = 0.8;                       // 1-2 mS/cm is optimal (for Zebra plants). < 00.8 mS/cm → fertilize 
+const int MOISTURE_THRESHOLD = 40;                    // 40-60% is optimal (for Zebra plants). < 40% → water
 const unsigned long PUMP_ACTIVATION_DURATION = 2000;  // activate for 2 seconds
 
 // Create barometric pressure sensor and WiFi client objects
