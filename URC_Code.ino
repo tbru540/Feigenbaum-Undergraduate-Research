@@ -1,9 +1,9 @@
 /* 
   Smart Agriculture Monitoring and Control System
-    - Created using Arduino GIGA R1 WiFi
-    - Reads temperature, humidity, soil moisture, electrical conductivity (EC), pH, barometric pressure, ambient light, and proximity
-    - Sends sensor data to a Flask web server via WiFi
-    - Automatically waters and fertilizes Zebra plant when soil conditions fall below a set threshold
+    - Created using Arduino GIGA R1 WiFi.
+    - Reads temperature, humidity, soil moisture, electrical conductivity (EC), pH, barometric pressure, ambient light, and proximity.
+    - Sends sensor data to a Flask web server via WiFi. Hosted by AWS EC2.
+    - Automatically waters and fertilizes Zebra plant when soil conditions fall below a set threshold.
 
   Project submitted for:
   Spring 2025 Feigenbaum Undergraduate Research Scholarship and Conference
