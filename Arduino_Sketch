@@ -24,6 +24,10 @@
     - BMP085 Barometric Pressure Sensor
     - AP3216C Ambient Light and Proximity Sensor
     - Relay Module (Water Pump & Fertilizer Pump)
+
+Note: Threshold values used in this project (ex. for soil moisture and EC)
+are for Zebra Plants specifically. Optimal ranges will vary by plant species
+and should be calibrated accordingly for best results.
 */
 
 #include <Wire.h>
@@ -60,9 +64,9 @@ DHT dht(DHTPIN, DHTTYPE);
 #define FERTILIZER_RELAY_PIN 5
 #define WATER_RELAY_PIN 6
 
-// Thresholds
-const float EC_THRESHOLD = 0.8;                       // 1-2 mS/cm is optimal (for Zebra plants). < 00.8 mS/cm → fertilize 
-const int MOISTURE_THRESHOLD = 40;                    // 40-60% is optimal (for Zebra plants). < 40% → water
+// Thresholds (based on optimal ranges for Zebra plants; 1-2 mS/cm and 40-60%)
+const float EC_THRESHOLD = 0.8;                       // < 00.8 mS/cm → fertilize 
+const int MOISTURE_THRESHOLD = 40;                    // < 40% → water
 const unsigned long PUMP_ACTIVATION_DURATION = 2000;  // activate for 2 seconds
 
 // Create barometric pressure sensor and WiFi client objects
