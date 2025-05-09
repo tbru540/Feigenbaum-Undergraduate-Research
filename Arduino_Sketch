@@ -85,7 +85,7 @@ void setup() {
 
   ecSensor.begin(1, Serial1);  
 
-  // Relay pin setup
+  // Relay pins setup
   pinMode(FERTILIZER_RELAY_PIN, OUTPUT);
   pinMode(WATER_RELAY_PIN, OUTPUT);
   digitalWrite(FERTILIZER_RELAY_PIN, LOW);
