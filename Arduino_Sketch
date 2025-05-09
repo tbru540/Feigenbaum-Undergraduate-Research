@@ -93,7 +93,7 @@ void setup() {
 
   delay(1000);
 
-  // Conenct to Wi-Fi
+  // Conenct to Wi-Fi (with serial debugging)
   Serial.println("Connecting to WiFi...");
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
