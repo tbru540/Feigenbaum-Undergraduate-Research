@@ -260,7 +260,7 @@ uint16_t readRawProximity() {
   return 0;
 }
 
-// Converts raw sensor value into distance (cm), capping it at 5 cm to avoid inaccuracies.
+// Convert raw proximity sensor value into distance (cm), capping it at 5 cm to avoid inaccuracies.
 float readNormalizedProximity() {
   uint16_t raw = readRawProximity();
   float prox = map(raw, 17000, 300, 0, 500) / 100.0;
