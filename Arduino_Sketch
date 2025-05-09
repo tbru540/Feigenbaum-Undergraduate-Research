@@ -60,7 +60,7 @@ DHT dht(DHTPIN, DHTTYPE);
 // Soil Moisture Pin  
 #define SOIL_MOISTURE_PIN A0
 
-// Relay Pins 
+// Relay Pins for Pump Activation
 #define FERTILIZER_RELAY_PIN 5
 #define WATER_RELAY_PIN 6
 
