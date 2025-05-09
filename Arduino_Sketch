@@ -23,7 +23,7 @@
     - Analog pH Sensor
     - BMP085 Barometric Pressure Sensor
     - AP3216C Ambient Light and Proximity Sensor
-    - Relay Module (Water Pump & Fertilizer Pump)
+    - Relay Modules (Water Pump & Fertilizer Pump)
 
 Note: Threshold values used in this project (ex. for soil moisture and EC)
 are for Zebra Plants specifically. Optimal ranges will vary by plant species
